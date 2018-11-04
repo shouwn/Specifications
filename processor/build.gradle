@@ -1,0 +1,28 @@
+plugins {
+    id 'java'
+}
+
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly 'org.projectlombok:lombok:1.18.4'
+    compile 'com.google.guava:guava:27.0-jre'
+    compile 'com.google.auto.service:auto-service:1.0-rc4'
+    compile 'com.squareup:javapoet:1.11.1'
+    testCompile("org.junit.jupiter:junit-jupiter-api:5.3.1")
+    testRuntime("org.junit.jupiter:junit-jupiter-engine:5.3.1")
+}
+
+test {
+    useJUnitPlatform {
+        includeTags 'fast', 'smoke & feature-a'
+        // excludeTags 'slow', 'ci'
+        includeEngines 'junit-jupiter'
+        // excludeEngines 'junit-vintage'
+    }
+}
