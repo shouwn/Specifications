@@ -28,6 +28,6 @@ project(':processor'){
 project(':sample'){
     dependencies{
         compile project(':annotation')
-        compile project(':processor')
+        compileOnly project(':processor')
     }
 }

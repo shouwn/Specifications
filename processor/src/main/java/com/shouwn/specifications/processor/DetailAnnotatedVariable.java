@@ -3,36 +3,46 @@ package com.shouwn.specifications.processor;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.shouwn.specifications.annotation.Detail;
+import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.FieldSpec;
-import lombok.Data;
+import com.squareup.javapoet.ParameterizedTypeName;
+import com.squareup.javapoet.TypeName;
 
 import javax.lang.model.element.Modifier;
-import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
+import javax.lang.model.type.TypeMirror;
 
 public class DetailAnnotatedVariable {
 
     private VariableElement annotatedVariableElement;
     private String simpleVariableName;
-    private String annotationType;
-    private Class type;
+    private TypeName type;
 
     public DetailAnnotatedVariable(VariableElement variableElement)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
+
         this.annotatedVariableElement = variableElement;
         Detail annotation = variableElement.getAnnotation(Detail.class);
-        this.annotationType = annotation.type();
+        String annotationType = annotation.type();
 
         Preconditions.checkArgument(!Strings.isNullOrEmpty(annotationType));
 
+        TypeMirror typeMirror = variableElement.asType();
+
         this.simpleVariableName = variableElement.getSimpleName().toString();
 
-        try {
-            this.type = Class.forName(variableElement.asType().toString());
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+        switch (annotationType){
+            case Detail.IDS:
+                ClassName list = ClassName.get("java.util", "List");
+                this.type = ParameterizedTypeName.get(list, ClassName.get(Long.class));
+                break;
+            case Detail.ID:
+                this.type = TypeName.get(Long.class);
+                break;
+            case Detail.ROW:
+                this.type = TypeName.get(variableElement.asType());
+                break;
         }
-
     }
 
     public FieldSpec fieldSpec(){
