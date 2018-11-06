@@ -1,5 +1,6 @@
 package com.shouwn.specifications.processor;
 
+import com.google.common.base.CaseFormat;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.shouwn.specifications.annotation.Detail;
@@ -35,9 +36,13 @@ public class DetailAnnotatedVariable {
             case Detail.IDS:
                 ClassName list = ClassName.get("java.util", "List");
                 this.type = ParameterizedTypeName.get(list, ClassName.get(Long.class));
+                this.simpleVariableName = "IdsOf" +
+                        CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, this.simpleVariableName);
                 break;
             case Detail.ID:
                 this.type = TypeName.get(Long.class);
+                this.simpleVariableName = "IdOf" +
+                        CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, this.simpleVariableName);
                 break;
             case Detail.ROW:
                 this.type = TypeName.get(variableElement.asType());

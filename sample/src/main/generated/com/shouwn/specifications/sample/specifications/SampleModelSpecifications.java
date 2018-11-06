@@ -9,7 +9,7 @@ import lombok.Data;
 public class SampleModelSpecifications {
   private String test;
 
-  private Long box;
+  private Long IdOfBox;
 
-  private List<Long> boxes;
+  private List<Long> IdsOfBoxes;
 }
